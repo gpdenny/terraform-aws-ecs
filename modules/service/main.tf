@@ -28,7 +28,7 @@ locals {
 }
 
 resource "aws_ecs_service" "this" {
-  count = var.create && !var.ignore_task_definition_changes ? 1 : 0
+  count = var.create && !var.ignore_task_definition_changes && !var.ignore_load_balancer_changes? 1 : 0
 
   dynamic "alarms" {
     for_each = length(var.alarms) > 0 ? [var.alarms] : []
@@ -214,7 +214,7 @@ resource "aws_ecs_service" "this" {
 ################################################################################
 
 resource "aws_ecs_service" "ignore_task_definition" {
-  count = var.create && var.ignore_task_definition_changes ? 1 : 0
+  count = var.create && var.ignore_task_definition_changes && !var.ignore_load_balancer_changes ? 1 : 0
 
   dynamic "alarms" {
     for_each = length(var.alarms) > 0 ? [var.alarms] : []
